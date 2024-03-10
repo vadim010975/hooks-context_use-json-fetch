@@ -14,14 +14,14 @@ const Comp = () => {
   ) => [
     data: Data | undefined,
     loading: boolean,
-    error: string | undefined,
+    error: Error | undefined,
   ];
 
   const useJsonFetch: UseJsonFetch = (url, opts) => {
   
     const [data, setData] = useState<Data>();
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string>();
+    const [error, setError] = useState<Error>();
 
     const fetchData = async () => {
       setLoading(true);
@@ -32,8 +32,8 @@ const Comp = () => {
         }
         const data = await response.json();
         setData(data);
-      } catch (e: any) {
-        setError(e.message);
+      } catch (e) {
+        setError(e as Error);
       } finally { setLoading(false); }
     }
 
@@ -53,7 +53,7 @@ const Comp = () => {
     <div>
       {loading && <div>Загрузка...</div>}
       {data && <div>Status: {data.status}</div>}
-      {error && <div>Ошибка: {error}</div>}
+      {error && <div>Ошибка: {error.message}</div>}
     </div>
   )
 }
